@@ -1,107 +1,118 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import imageContainerBackground from '../assets/Chess-amico 1.png';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
+const PRIMARY_COLOR = '#FF6A00';
+const GRAY_COLOR = '#9E9E9E';
 
 export default function LoginScreen({ navigation }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState('');
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
+  const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
   return (
-    
-    <View style={styles.container}>
-      <View style={styles.containerTextImage}>
-        <Text style={styles.textBackground}>Bem vindo {'\n'}de volta</Text>
-        <Image style={styles.imageContainer} source={imageContainerBackground}/>
-      </View>
-      <View style={styles.content}>
-        <Text style={styles.title}>Log In</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Ajusta para o tipo de plataforma
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          <View style={styles.containerTextImage}>
+            <Text style={styles.textBackground}>Bem vindo {'\n'}de volta</Text>
+            <Image style={styles.imageContainer} source={require('../assets/Chess-amico 1.png')} />
+          </View>
+          <View style={styles.content}>
+            <Text style={styles.title}>Log In</Text>
 
-        <Text style={styles.textInput}>Email</Text>
-        <View style={styles.inputContent}>
-          <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" />
-        </View>
+            <Text style={styles.inputLabel}>Email</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                keyboardType="email-address"
+              />
+            </View>
 
-        <Text style={styles.textInput}>Senha</Text>
-        <View style={styles.inputContent}>
-          <TextInput style={styles.input} placeholder="Senha" secureTextEntry={!passwordVisible} value={password} onChangeText={setPassword}/>
-            <TouchableOpacity onPress={togglePasswordVisibility} style={styles.toggleButton}>
-              <Text style={styles.iconContainer}>
-                <Icon name={passwordVisible ? 'visibility-off' : 'visibility'} size={24} color="#000" />
-              </Text>
+            <Text style={styles.inputLabel}>Senha</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Senha"
+                secureTextEntry={!passwordVisible}
+                value={password}
+                onChangeText={setPassword}
+              />
+              <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconButton}>
+                <Icon name={passwordVisible ? 'visibility-off' : 'visibility'} size={22} color="#9E9E9E" />
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.buttonForgotPass}>Esqueceu a senha?</Text>
+
+            <TouchableOpacity style={styles.buttonLogin} onPress={() => navigation.navigate('Events')}>
+              <Text style={styles.buttonTextLogin}>Login</Text>
             </TouchableOpacity>
-            
-        </View>
-        <Text style={styles.buttonForgotPass}>Esqueceu a senha?</Text>
 
-        <TouchableOpacity style={styles.buttonLogin} onPress={() => navigation.navigate('Events')}>
-          <Text style={styles.buttonTextLogin}>Login</Text>
-        </TouchableOpacity>
-        <Text>
-          <Text style={styles.linkText} onPress={() => navigation.navigate('Register')}>
-            Não tem conta?
-          </Text> {' '}
-          <Text style={styles.linkTextRegister} onPress={() => navigation.navigate('Register')}>
-            Registre-se
-          </Text>
-        </Text>
-        
-      </View>
-    </View>
+            <Text style={styles.footerText}>
+              Não tem conta?{' '}
+              <Text style={styles.linkText} onPress={() => navigation.navigate('Register')}>Registre-se</Text>
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+      </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { 
     flex: 1,
-    backgroundColor: '#FF6A00'
+    backgroundColor: PRIMARY_COLOR
   },
-
   containerTextImage: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: '28%',
-    position: 'absolute'
+    marginTop: '20%',
   },
-
   textBackground: {
     color: '#fff',
     fontWeight: "700",
     fontSize: 30,
-    padding: 25,
+    paddingLeft:30,
     flex: 1,
   },
-
   imageContainer: {
-    width: '50%',
-    height: '180%',
+    width: '56%', // ou maior, dependendo do quanto você quer aumentar
+    height: undefined, // permite que o aspecto da imagem seja mantido
+    aspectRatio: 1, // ajusta para manter a proporção da imagem
+    resizeMode: 'contain',
   },
-
   content: {
+    flex: 1,
     backgroundColor: '#fff',
     padding: 30,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     marginTop: 'auto',
   },
-
   title: { 
+    paddingVertical: 30,
     fontSize: 28,
     fontWeight: 'bold', 
-    color: '#FF6A00',
-    padding: 30,
-    textAlign: 'center'
+    color: PRIMARY_COLOR,
+    textAlign: 'center',
   },
-
-  inputContent: {
+  inputLabel: {
+    fontWeight: '600',
+    paddingBottom: 5,
+    color: '#000',
+  },
+  inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    height: '10%',
+    height: 50, 
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 10,
@@ -109,51 +120,37 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: 20,
   },
-
-  textInput: {
-    fontWeight: '600',
-    paddingBottom: 5,
-  },
-
   input: { 
     flex: 1,
     padding: 10,
   },
-
-  iconContainer: {
-    padding: 10,
-    color: '#'
+  iconButton: {
+    paddingHorizontal: 10,
   },
-
   buttonForgotPass: {
-    marginTop: -20,
-    color: '#9E9E9E',
+    color: GRAY_COLOR,
     fontWeight: '600',
     textAlign: 'right',
-    paddingTop: 5,
+    marginTop: -10,
   },
-
   buttonLogin: { 
-    backgroundColor: '#FF6A00',
+    backgroundColor: PRIMARY_COLOR,
     padding: 18, 
     borderRadius: 10,
     width: "100%",
-    marginTop: "10%",
-    marginBottom: "30%"
+    marginTop: 20,
   },
-
   buttonTextLogin: {
       color: '#fff', 
       fontWeight: '700',
       textAlign: 'center',
   },
-
-  linkText: {
-    color: '#9E9E9E',
-    marginTop: 10,
-    textAlign: 'center'
+  footerText: {
+    color: GRAY_COLOR,
+    marginTop: 20,
+    textAlign: 'center',
   },
-  linkTextRegister: {
-    color: '#FF6A00'
+  linkText: {
+    color: PRIMARY_COLOR,
   }
 });

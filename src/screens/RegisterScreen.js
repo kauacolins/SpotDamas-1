@@ -1,29 +1,287 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Modal,
+  FlatList
+} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+const PRIMARY_COLOR = '#FF6A00';
+const GRAY_COLOR = '#9E9E9E';
+
+const cities = [
+  { id: '1', name: 'São Paulo' },
+  { id: '2', name: 'Rio de Janeiro' },
+  { id: '3', name: 'Belo Horizonte' },
+  { id: '4', name: 'Curitiba' },
+  { id: '5', name: 'Salvador' },
+  { id: '6', name: 'Fortaleza' },
+  // Adicione mais cidades conforme necessário
+];
 
 export default function RegisterScreen({ navigation }) {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [region, setRegion] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+
+  const selectCity = (city) => {
+    setRegion(city);
+    setModalVisible(false);
+    setSearchQuery(''); // Limpa a busca ao selecionar uma cidade
+  };
+
+  const filteredCities = cities.filter(city => 
+    city.name.toLowerCase().includes(searchQuery.toLowerCase()) && searchQuery.length >= 3
+  );
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
-      <TextInput style={styles.input} placeholder="Nome" />
-      <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" />
-      <TextInput style={styles.input} placeholder="Senha" secureTextEntry />
-      <TextInput style={styles.input} placeholder="Região" />
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.buttonText}>Registro-se</Text>
-      </TouchableOpacity>
-      <Text style={styles.linkText} onPress={() => navigation.navigate('Login')}>
-        Já tem conta? Entre
-      </Text>
-    </View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          <View style={styles.containerTextImage}>
+            <Text style={styles.textBackground}>Faça seu {'\n'}registro</Text>
+            <Image style={styles.imageContainer} source={require('../assets/Chess-amico 1.png')} />
+          </View>
+          <View style={styles.content}>
+            <Text style={styles.title}>Registre-se</Text>
+
+            <Text style={styles.inputLabel}>Nome</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Nome"
+                value={name}
+                onChangeText={setName}
+              />
+            </View>
+
+            <Text style={styles.inputLabel}>Email</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                keyboardType="email-address"
+                value={email}
+                onChangeText={setEmail}
+              />
+            </View>
+
+            <Text style={styles.inputLabel}>Senha</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Senha"
+                secureTextEntry={!passwordVisible}
+                value={password}
+                onChangeText={setPassword}
+                
+              />
+              <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconButton}>
+                <Icon name={passwordVisible ? 'visibility-off' : 'visibility'} size={22} color="#9E9E9E" />
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.inputLabel}>Região</Text>
+            <TouchableOpacity style={styles.inputContainer} onPress={() => setModalVisible(true)}>
+              <Text style={[styles.selectedCity, { color: region ? '#000' : '#D3D3D3' }]}>
+              {region || 'Selecione uma cidade'}
+            </Text>
+            <Icon name="search" size={22} color="#9E9E9E" style={styles.searchIcon} />
+
+            </TouchableOpacity>
+
+            <Modal visible={modalVisible} animationType="slide">
+              <View style={styles.modalContainer}>
+                <View style={styles.searchContainer}>
+                  <TextInput
+                    style={styles.searchInput}
+                    placeholder="Pesquise uma cidade"
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                    placeholderTextColor="#D3D3D3"
+                  />
+                  <Icon name="search" size={22} color="#9E9E9E" style={styles.searchIcon} />
+                </View>
+                <FlatList
+                  data={filteredCities}
+                  keyExtractor={item => item.id}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity style={styles.cityItem} onPress={() => selectCity(item.name)}>
+                      <Text style={styles.cityText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  )}
+                  ListEmptyComponent={<Text style={styles.emptyText}>Nenhuma cidade encontrada</Text>}
+                />
+                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                  <Text style={styles.closeButtonText}>Fechar</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+
+            <TouchableOpacity style={styles.buttonRegister} onPress={() => navigation.navigate('Events')}>
+              <Text style={styles.buttonTextRegister}>Registre-se</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.footerText}>
+              Já tem conta?{' '}
+              <Text style={styles.linkText} onPress={() => navigation.navigate('Login')}>Faça login</Text>
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { /* estilos do container */ },
-  title: { fontSize: 24, fontWeight: 'bold' },
-  input: { /* estilos de input */ },
-  button: { backgroundColor: '#FF6A00', padding: 12, borderRadius: 5 },
-  buttonText: { color: '#FFF' },
-  linkText: { color: '#FF6A00', marginTop: 10 },
+  container: { 
+    flex: 1,
+    backgroundColor: PRIMARY_COLOR,
+  },
+  containerTextImage: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: '20%',
+  },
+  textBackground: {
+    color: '#fff',
+    fontWeight: "700",
+    fontSize: 30,
+    paddingLeft: 30,
+    flex: 1,
+  },
+  imageContainer: {
+    width: '56%',
+    height: undefined,
+    aspectRatio: 1,
+    resizeMode: 'contain',
+  },
+  content: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    marginTop: 'auto',
+  },
+  title: { 
+    paddingVertical: 30,
+    fontSize: 28,
+    fontWeight: 'bold', 
+    color: PRIMARY_COLOR,
+    textAlign: 'center',
+  },
+  inputLabel: {
+    fontWeight: '600',
+    paddingBottom: 5,
+    color: '#000',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%', // Ajustar para ter largura completa
+    height: 50, // Defina uma altura fixa
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    padding: 5,
+    backgroundColor: '#fff',
+    marginBottom: 20,
+  },
+  input: { 
+    flex: 1,
+    padding: 10,
+  },
+  selectedCity: {
+    flex: 1,
+    padding: 10,
+    color: '#C0C0C0',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 20,
+    marginVertical: 30,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    height: 50, // Defina uma altura fixa
+    marginBottom: 20,
+    padding: 5,
+    marginVertical: 30,
+  },
+  searchInput: {
+    flex: 1,
+    padding: 10,
+  },
+  searchIcon: {
+    marginHorizontal: 10,
+  },
+  cityItem: {
+    padding: 15,
+  },
+  cityText: {
+    fontSize: 16,
+  },
+  emptyText: {
+    textAlign: 'center',
+    margin: 20,
+    color: GRAY_COLOR,
+  },
+  closeButton: {
+    backgroundColor: PRIMARY_COLOR,
+    padding: 18, 
+    borderRadius: 10,
+    width: "100%",
+    marginTop: 20,
+  },
+  closeButtonText: {
+    color: '#fff', 
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  iconButton: {
+    padding: 10,
+  },
+  buttonRegister: { 
+    backgroundColor: PRIMARY_COLOR,
+    padding: 18, 
+    borderRadius: 10,
+    width: "100%",
+    marginTop: 20,
+  },
+  buttonTextRegister: {
+      color: '#fff', 
+      fontWeight: '700',
+      textAlign: 'center',
+  },
+  footerText: {
+    color: GRAY_COLOR,
+    marginTop: 20,
+    textAlign: 'center',
+  },
+  linkText: {
+    color: PRIMARY_COLOR,
+  }
 });
