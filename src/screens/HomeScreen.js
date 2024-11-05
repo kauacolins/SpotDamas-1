@@ -2,27 +2,37 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import imagemBackgroundHomeScreen from '../assets/Group 1.png';
 
+// Constantes para cores e dimensões
 const { width } = Dimensions.get('window');
+const PRIMARY_COLOR = '#FF6A00';
+const BLACK_COLOR = '#000';
+const WHITE_COLOR = '#fff';
 
 export default function HomeScreen({ navigation }) {
+  const handleLoginPress = () => navigation.navigate('Login');
+  const handleRegisterPress = () => navigation.navigate('Register');
+
   return (
     <View style={styles.container}>
+      {/* Imagem de fundo e sobreposição */}
       <Image source={imagemBackgroundHomeScreen} style={styles.imageHomeScreen} />
       <View style={styles.overlay} />
+
+      {/* Conteúdo principal */}
       <View style={styles.content}>
         <Text style={styles.logo}>SpotDama</Text>
         <Text style={styles.description}>
           Descubra torneios de dama perto de você e desafie sua estratégia!
         </Text>
 
-        <View style={styles.buttonsLoginRegister}>
-            <TouchableOpacity style={styles.buttonLogin} onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.buttonTextLogin}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonRegister} onPress={() => navigation.navigate('Register')}>
-              <Text style={styles.buttonTextRegister}>Registre-se</Text>
-            </TouchableOpacity>
-            
+        {/* Botões de Login e Registro */}
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={styles.buttonLogin} onPress={handleLoginPress}>
+            <Text style={styles.buttonTextLogin}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonRegister} onPress={handleRegisterPress}>
+            <Text style={styles.buttonTextRegister}>Registre-se</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -32,70 +42,67 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: { 
     flex: 1,
+    backgroundColor: WHITE_COLOR,
   },
 
   imageHomeScreen: {
     width: '100%',
-    height: '50%', // Ajuste a altura conforme necessário
-    resizeMode: 'cover', // Cobrir a área, mantendo a proporção
-    top: 0,
-    left: 0,
+    height: '50%',
+    resizeMode: 'cover',
   },
-  
-  overlay: { /* overlay para escurecer a imagem */ },
 
   content: { 
-    marginTop: '10%', // Deixe espaço suficiente para a imagem, ajuste conforme necessário
+    flex: 1,
+    marginTop: '10%',
     marginHorizontal: '7%',
-    zIndex: 1, // Certifica-se de que o conteúdo fique acima da imagem e da sobreposição
+    zIndex: 1,
   },
 
   logo: { 
     fontSize: 28, 
     fontWeight: 'bold',
-    color: '#000',
-    paddingVertical: 10
+    color: BLACK_COLOR,
+    paddingVertical: 10,
   },
 
   description: { 
     fontSize: 20,
-    color: '#000',
+    color: BLACK_COLOR,
     fontWeight: '600',
-    lineHeight: '27%',
+    lineHeight: 27,
+    marginBottom: 20,
   },
 
-  buttonsLoginRegister: {
+  buttonsContainer: {
     alignItems: 'center',
   },
 
   buttonLogin: { 
-    backgroundColor: '#FF6A00',
+    backgroundColor: PRIMARY_COLOR,
     padding: 18, 
     borderRadius: 10,
     width: "100%",
-    marginTop: "10%",
+    marginTop: 20,
   },
 
   buttonTextLogin: {
-      color: '#fff', 
-      fontWeight: '700',
-      textAlign: 'center',
+    color: WHITE_COLOR, 
+    fontWeight: '700',
+    textAlign: 'center',
   },
       
   buttonRegister: { 
-    borderColor: '#FF6A00',
+    borderColor: PRIMARY_COLOR,
     borderWidth: 1,
     padding: 18,
     borderRadius: 10,
-    justifyContent: 'center',
     width: "100%",
-    marginTop: "3%",
+    marginTop: 10,
   },
   
-  
   buttonTextRegister: {
-      color: '#FF6A00',
-      fontWeight: '700',
-      textAlign: 'center',
-    },
+    color: PRIMARY_COLOR,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
 });
