@@ -1,32 +1,56 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';  // Importa o hook de navegação
+
+
 
 const { width } = Dimensions.get('window'); // Obtém a largura da tela
 
 export default function TournamentCard({ imageCard, title, location, date, price }) {
+
+  const navigation = useNavigation(); // Inicializa o hook de navegação
+
   return (
+    
     <View style={styles.card}>
       <View style={styles.imageCardContainer}>
-        <Image source={imageCard} style={styles.imageCard} />
+        {/* Verifica se a imagem está disponível, senão coloca uma imagem padrão */}
+        <Image source={imageCard || require('../assets/default-image.png')} style={styles.imageCard} />
       </View>
-      <Text style={styles.title}>{title}</Text>
+      
+      {/* Adiciona valor padrão para título */}
+      <Text style={styles.title}>{title || "Torneio Sem Título"}</Text>
 
       <View style={styles.iconTextContainer}>
         <Icon name="location-on" size={20} color="#666" />
-        <Text style={styles.details}>{location}</Text>
+        {/* Adiciona valor padrão para localização */}
+        <Text style={styles.details}>{location || "Localização desconhecida"}</Text>
       </View>
 
       <View style={styles.iconTextContainer}>
         <Icon name="date-range" size={20} color="#666" />
-        <Text style={styles.details}>{date}</Text>
+        {/* Adiciona valor padrão para data */}
+        <Text style={styles.details}>{date || "Data não informada"}</Text>
       </View>
 
       <View style={styles.contentCard}>
-        <Text style={styles.price}>{price}</Text>
-        <TouchableOpacity style={styles.button}>
+        {/* Adiciona valor padrão para preço */}
+        <Text style={styles.price}>{price || "Preço não informado"}</Text>
+
+        <TouchableOpacity 
+          style={styles.button} 
+          onPress={() => navigation.navigate('TournamentDetailsScreen', {
+            title,
+            location,
+            date,
+            price,
+            imageCard
+          })}
+        >
           <Text style={styles.buttonText}>Ver Detalhes</Text>
         </TouchableOpacity>
+        
       </View>
     </View>
   );
@@ -87,6 +111,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFF',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 });

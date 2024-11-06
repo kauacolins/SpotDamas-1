@@ -9,17 +9,13 @@ const FooterNavigation = () => {
 
   return (
     <View style={styles.footer}>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
-        <Icon name="home" size={24} color="#FF6A00" />
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Events')}>
+        <Icon name="home" size={30} color="#ccc" />
         <Text style={styles.label}>Home</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Events')}>
-        <Icon name="event" size={24} color="#FF6A00" />
-        <Text style={styles.label}>Events</Text>
-      </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile')}>
-        <Icon name="person" size={24} color="#FF6A00" />
-        <Text style={styles.label}>Profile</Text>
+        <Icon name="person" size={30} color="#ccc" />
+        <Text style={styles.label}>Perfil</Text>
       </TouchableOpacity>
     </View>
   );
@@ -31,7 +27,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingVertical: 10,
     backgroundColor: '#fff',
-    borderTopWidth: 1,
     borderColor: '#ccc',
   },
   button: {
@@ -39,7 +34,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    color: '#FF6A00',
+    color: '#ccc',
+
   },
 });
 

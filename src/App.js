@@ -7,6 +7,11 @@ import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import EventsScreen from './screens/EventsScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import EditProfileScreen from './screens/EditProfileScreen';
+import TournamentDetailsScreen from './screens/TournamentDetailsScreen';
+
+
 
 const Stack = createStackNavigator();
 
@@ -19,6 +24,10 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Events" component={EventsScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+        <Stack.Screen name="TournamentDetailsScreen" component={TournamentDetailsScreen} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
