@@ -10,6 +10,7 @@ import EventsScreen from './screens/EventsScreen';
 
 const Stack = createStackNavigator();
 
+
 export default function App() {
   return (
     <NavigationContainer>

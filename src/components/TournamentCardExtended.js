@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const { width } = Dimensions.get('window'); // Obtém a largura da tela
 
-export default function TournamentCard({ imageCard, title, location, date, price }) {
+export default function TournamentCardExtended({ imageCard, title, location, date, price }) {
   return (
     <View style={styles.card}>
       <View style={styles.imageCardContainer}>
@@ -36,9 +36,9 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#FFF',
     padding: 14,
-    width: width * 0.7, // 70% da largura da tela
+    width: '100%', 
     borderRadius: 14,
-    marginBottom: 16,
+    marginTop: 16,
     marginRight: 20,
   },
   imageCardContainer: {
