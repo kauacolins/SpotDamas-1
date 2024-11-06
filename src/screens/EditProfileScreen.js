@@ -29,9 +29,9 @@ const cities = [
 export default function EditProfileScreen({ navigation }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('usuario@exemplo.com');
-  const [name, setName] = useState('Nome do Usuário');
-  const [region, setRegion] = useState('São Paulo');
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [region, setRegion] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [profileImage, setProfileImage] = useState(
@@ -60,9 +60,6 @@ export default function EditProfileScreen({ navigation }) {
           <View style={styles.containerTextImage}>
             <Text style={styles.textBackground}>Editar Perfil</Text>
             <Image style={styles.imageContainer} source={{ uri: profileImage }} />
-            <TouchableOpacity style={styles.editImageButton} onPress={() => { /* Função para alterar a imagem */ }}>
-              <Icon name="edit" size={20} color="#fff" />
-            </TouchableOpacity>
           </View>
           <View style={styles.content}>
             <Text style={styles.title}>Altere suas informações</Text>

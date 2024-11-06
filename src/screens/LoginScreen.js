@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PRIMARY_COLOR = '#FF6A00';
 const GRAY_COLOR = '#9E9E9E';
@@ -8,8 +9,46 @@ const GRAY_COLOR = '#9E9E9E';
 export default function LoginScreen({ navigation }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
 
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+
+  // Função para realizar o login
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Erro', 'Por favor, preencha o email e a senha.');
+      return;
+    }
+
+    try {
+      const response = await fetch('https://sua-api.com/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          senha: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.status === 200) {
+        // Armazena os dados do usuário no AsyncStorage
+        await AsyncStorage.setItem('user', JSON.stringify(data));
+
+        // Navega para a tela de Eventos (ou outra tela)
+        navigation.navigate('Events');
+      } else if (response.status === 401) {
+        Alert.alert('Erro', 'Email ou senha inválidos.');
+      } else {
+        Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login. Tente novamente.');
+      }
+    } catch (error) {
+      Alert.alert('Erro', 'Erro de conexão. Tente novamente mais tarde.');
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -19,7 +58,7 @@ export default function LoginScreen({ navigation }) {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
           <View style={styles.containerTextImage}>
-            <Text style={styles.textBackground}>Bem vindo {'\n'}de volta</Text>
+            <Text style={styles.textBackground}>Bem-vindo {'\n'}de volta</Text>
             <Image style={styles.imageContainer} source={require('../assets/Chess-amico 1.png')} />
           </View>
           <View style={styles.content}>
@@ -31,6 +70,8 @@ export default function LoginScreen({ navigation }) {
                 style={styles.input}
                 placeholder="Email"
                 keyboardType="email-address"
+                value={email}
+                onChangeText={setEmail}
               />
             </View>
 
@@ -50,7 +91,7 @@ export default function LoginScreen({ navigation }) {
 
             <Text style={styles.buttonForgotPass}>Esqueceu a senha?</Text>
 
-            <TouchableOpacity style={styles.buttonLogin} onPress={() => navigation.navigate('Events')}>
+            <TouchableOpacity style={styles.buttonLogin} onPress={handleLogin}>
               <Text style={styles.buttonTextLogin}>Login</Text>
             </TouchableOpacity>
 
@@ -61,7 +102,7 @@ export default function LoginScreen({ navigation }) {
           </View>
         </View>
       </ScrollView>
-      </KeyboardAvoidingView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -73,7 +114,7 @@ const styles = StyleSheet.create({
   containerTextImage: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: '20%',
+    marginTop: Platform.OS === 'web' ? '10%' : '20%', // Menor margem no web
   },
   textBackground: {
     color: '#fff',
@@ -83,10 +124,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageContainer: {
-    width: '56%', // ou maior, dependendo do quanto você quer aumentar
+    width: Platform.OS === 'web' ? '30%' : '56%', // Menor largura para web
     height: undefined, // permite que o aspecto da imagem seja mantido
     aspectRatio: 1, // ajusta para manter a proporção da imagem
     resizeMode: 'contain',
+    maxHeight: 200, // Altura máxima para limitar em telas maiores
   },
   content: {
     flex: 1,

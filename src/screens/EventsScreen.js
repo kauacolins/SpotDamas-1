@@ -18,8 +18,8 @@ export default function EventsScreen() {
 
   const tournaments = [
     { id: '1', title: 'Torneio de Dama 2024', date: '20 de Outubro', location: 'São Luís, MA', price: 'R$35,00' },
-    { id: '2', title: 'Torneio de Dama 2024', date: '20 de Outubro', location: 'São Luís, MA', price: 'R$35,00' },
-    { id: '3', title: 'Torneio de Dama 2024', date: '20 de Outubro', location: 'São Luís, MA', price: 'R$35,00' },
+    { id: '2', title: 'Torneio de Dama ', date: '20 de Outubro', location: 'São Luís, MA', price: 'R$35,00' },
+    { id: '3', title: 'Torneio de ', date: '20 de Outubro', location: 'São Luís, MA', price: 'R$35,00' },
     // Outros torneios
   ];
 
